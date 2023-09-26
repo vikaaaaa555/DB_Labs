@@ -10,7 +10,6 @@
 
 Все пользователи **обязаны** авторизоваться
 
-
 ### 1. Админ
 
 Имеет полный доступ ко всем функциям системы:
@@ -29,7 +28,7 @@
 
 ### 3. Пользователь
 
-- поиск документов, просмотр содержания
+- поиск коллекций, просмотр документов
 
 - добавление документов в избранное
 
@@ -37,124 +36,193 @@
 
 # Реализация
 
-![image](https://github.com/vikaaaaa555/DB_Labs/assets/90476803/7e9102fa-a283-42c7-ac45-4da175fa3f35)
+![image](https://github.com/vikaaaaa555/DB_Labs/assets/90476803/fd5ae250-7c65-41d1-9bf4-6dabb9213c19)
 
 ## Сущности
 
-### User
+
+### 1. user
 
 Описывает пользователя
 
-- ***userID***: уникальный id пользователся *(int)*
+Поля:
 
-- ***login***: логин *(string)*
+- ***id***: уникальный id пользователся *(INT)*
 
-- ***password***: пароль *(string)*
+- ***login***: логин *(VARCHAR(20))*
 
-- ***roleID***: id присваиваемой роли *(string)*
+- ***password***: пароль *(VARCHAR(20))*
 
-### Role
+Связи:
+
+- **One to one** с *profile*
+
+- **One to many** с *user, role, action и author*
+
+
+### 2. profile
+
+Поля:
+
+- ***id_user*** id пользователя *(INT)*
+
+- ***first_name*** имя *(VARCHAR(20))*
+
+- ***last_name*** фамилия *(VARCHAR(20))*
+
+- ***email*** почта *(VARCHAR(30))*
+
+- ***phone_number*** телефон *(VARCHAR(15))*
+
+- ***birth_date*** дфтф рождения *(TIMESTAMP(8))*
+
+Связи:
+
+- **One to one** с *user*
+
+
+### 3. role
+
+Поля:
 
 Роль, присваиваемая каждому пользователю
 
-- ***roleID***: id присваиваемой роли *(int)*
+- ***id***: id присваиваемой роли *(INT)*
 
-- ***roleName***: админ/архивист/пользователь *(string)*
+- ***type***: админ/архивист/пользователь *(VARCHAR(10))*
 
-### UserAction
+Связи:
+
+- **One to many** с *user*
+
+
+### 4. action
 
 Журанлирование действий пользователя
 
-- ***actionID***: id действия *(int)*
+Поля:
 
-- ***userID***: уникальный id пользователся *(int)*
+- ***id***: id действия *(INT)*
 
-- ***action***: описание действия *(string)*
+- ***timestamp***: запись времени когда произошло действие *(TIMESTAMP(10))*
 
-- ***timestamp***: запись времени когда произошло действие *(datatime)*
+Связи:
 
-### Collection
+- **One to many** с *user*
 
-Организация и группировка материалов
 
-- ***collectonID***: id коллекции *(int)*
+### 5. action_type
 
-- ***collectionName***: название *(string)*
+Тип действия
 
-- ***description***: описание *(string)*
+Поля:
 
-### Document
+- ***id_action***: id действия *(INT)*
 
-Элемент коллекции
+- ***typename***: название действия *(VARCHAR(45))*
 
-- ***documentID***: id документа *(int)*
+Связи:
 
-- ***title***: название *(string)*
+- **One to many** с *user*
 
-- ***description***: описание *(string)*
 
-- ***documentDate***: дата создания *(datetime)*
-
-- ***epochID***: id эпохи, к которой относится документ *(int)*
-
-- ***figureID***: id исторической фигуры, к которой относится документ (необязательно) *(int)*
-
-- ***eventID***: id события, к которому относится документ *(int)*
-
-- ***type***: тип документа (статья, фото и т.д) *(string)*
-
-### Event
-
-Историческое событие
-
-- ***eventID***: id события *(int)*
-
-- ***eventName***: название *(string)*
-
-- ***description***: описание *(string)*
-
-- ***eventDate***: дата *(datetime)*
-
-### HistoricalFigure
-
-Историческая личность
-
-- ***figureID***: id *(int)*
-
-- ***firstName***: имя *(string)*
-
-- ***lastName***: фамилия *(string)*
-
-- ***birthDate***: дата рождения *(datetime)*
-
-- ***deathDate***: дата смерти *(datetime)*
-
-- ***countrieID***: id страны, к которой она(он) принадлежит *(int)*
-
-### Countrie
-
-Страна
-
-- ***countrieID***: id страны *(int)*
-
-- ***countrieName***: название *(string)*
-
-### Epoch
-
-Историческая эпоха
-
-- ***epochID***: id эпохи *(int)*
-
-- ***epochName***: название *(string)*
-
-### Author
+### 6. author
 
 Автор документа
 
-- ***authorID***: id автора *(int)*
+Поля:
 
-- ***firstName***: имя *(string)*
+- ***id***: id автора *(int)*
 
-- ***lastName***: фамилия *(string)*
+Связи:
 
-- ***works***: список работ *(string)*
+- **One to many** с *user, document*
+
+
+### 7. collection
+
+Организация и группировка материалов
+
+Поля:
+
+- ***id***: id коллекции *(INT)*
+
+- ***name***: название *(VARCHAR(20))*
+
+- ***description***: описание *(TINYTEXT)*
+
+Связи:
+
+- **Many to many** с *user, document*
+
+
+### 8. document
+
+Элемент коллекции
+
+Поля:
+
+- ***id***: id документа *(INT)*
+
+- ***title***: название *(VARCHAR(45))*
+
+- ***description***: описание *(TINYTEXT)*
+
+- ***date***: дата создания *(TIMESTAMP(10))*
+
+Связи:
+
+- **One to many** с *author, doc_type*
+
+- **Many to many** с *collection, countrie, historical_figure*
+
+
+### 9. doc_type
+
+Тип документа
+
+Поля:
+
+- ***id***: id автора *(int)*
+
+- ***type_doc***: тип документа *(VARCHAR(10))*
+
+Связи:
+
+- **One to many** с *document*
+
+
+### 10. historical_figure
+
+Историческая личность
+
+Поля:
+
+- ***id***: id *(INT)*
+
+- ***first_name***: имя *(VARCHAR(45))*
+
+- ***last_name***: фамилия *(VARCHAR(45))*
+
+- ***birth_date***: дата рождения *(DATE)*
+
+- ***death_date***: дата смерти *(DATE)*
+
+Связи:
+
+- **Many to many** с *document, countrie*
+
+
+### 11. countrie
+
+Страна
+
+Поля:
+
+- ***id***: id страны *(INT)*
+
+- ***name***: название *(VARCHAR(45))*
+
+- ***start_date***: дата основания *(DATE)*
+
+- ***over_date***: дата распада *(DATE)*
