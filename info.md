@@ -74,7 +74,7 @@
 
 - ***phone_number*** телефон *(VARCHAR(15))*
 
-- ***birth_date*** дфтф рождения *(TIMESTAMP(8))*
+- ***birth_date*** дата рождения *(TIMESTAMP(8))*
 
 Связи:
 
@@ -132,7 +132,7 @@
 
 Поля:
 
-- ***id***: id автора *(int)*
+- ***id***: id автора *(INT)*
 
 Связи:
 
@@ -183,7 +183,7 @@
 
 Поля:
 
-- ***id***: id автора *(int)*
+- ***id***: id автора *(INT)*
 
 - ***type_doc***: тип документа *(VARCHAR(10))*
 
@@ -226,3 +226,7 @@
 - ***start_date***: дата основания *(DATE)*
 
 - ***over_date***: дата распада *(DATE)*
+
+Связи:
+
+- **Many to many** с *document, historical_figure*
