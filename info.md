@@ -36,7 +36,7 @@
 
 # Реализация
 
-![image](https://github.com/vikaaaaa555/DB_Labs/assets/90476803/fd5ae250-7c65-41d1-9bf4-6dabb9213c19)
+![Archive DataBase](https://github.com/vikaaaaa555/DB_Labs/raw/main/archive.png)
 
 ## Сущности
 
