@@ -147,3 +147,7 @@ INSERT INTO user_collection_link (user_id, collection_id, is_subscribe)
 SELECT u.id AS user_id, c.id AS collection_id, RANDOM() > 0.5
 FROM users u
 CROSS JOIN collection c;
+
+UPDATE document SET author_id = 1 WHERE id IN (1, 2, 8, 9, 10);
+UPDATE document SET author_id = 2 WHERE id IN (4, 5, 6);
+UPDATE document SET author_id = 4 WHERE id IN (3, 7);
