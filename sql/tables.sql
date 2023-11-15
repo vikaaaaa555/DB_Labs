@@ -141,3 +141,17 @@ CREATE TABLE IF NOT EXISTS collection_doc_link
 	FOREIGN KEY (collection_id) REFERENCES collection (id),
 	FOREIGN KEY (document_id) REFERENCES document (id) ON DELETE CASCADE
 );
+
+
+CREATE OR REPLACE FUNCTION check_author_role(author_id SMALLINT)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN author_id IN (SELECT id FROM users WHERE role_id IN (1, 2));
+END;
+$$ LANGUAGE plpgsql;
+
+
+ALTER TABLE document
+ADD COLUMN author_id SMALLINT CHECK (check_author_role(author_id)),
+ADD CONSTRAINT fk_author
+    FOREIGN KEY (author_id) REFERENCES users (id);
