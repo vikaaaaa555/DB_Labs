@@ -109,8 +109,14 @@ ORDER BY
 
 
 -- Кол-во действий каждого типа которые выполнены пользователями
-SELECT at.id, at.name AS action_name, COUNT(a.action_type_id) AS type_count
-FROM action_type at
+SELECT
+	at.id, at.name AS action_name,
+	COUNT(a.action_type_id) AS type_count
+FROM
+	action_type at
 JOIN action a ON a.action_type_id = at.id
-GROUP BY action_name, at.id
-ORDER BY at.id DESC
+GROUP BY
+	action_name,
+	at.id
+ORDER BY
+	at.id DESC
