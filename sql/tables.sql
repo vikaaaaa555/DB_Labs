@@ -1,7 +1,9 @@
 CREATE TABLE IF NOT EXISTS role
 (
 	id SMALLINT PRIMARY KEY UNIQUE,
-	role_type VARCHAR(20) NOT NULL UNIQUE
+	role_type VARCHAR(20) NOT NULL UNIQUE,
+
+	INDEX idx_role_type_name (role_type)
 );
 
 CREATE TABLE IF NOT EXISTS users
@@ -13,7 +15,9 @@ CREATE TABLE IF NOT EXISTS users
 	
 	FOREIGN KEY (role_id) REFERENCES role (id),
 	CHECK (login ~ '^[A-Za-z0-9_]+$'),
-	CHECK (password ~ '^[a-zA-Z0-9\-_@%]+$')
+	CHECK (password ~ '^[a-zA-Z0-9\-_@%]+$'),
+
+	INDEX idx_role_id (role_id)
 );
 
 CREATE TABLE IF NOT EXISTS profile
@@ -37,7 +41,9 @@ CREATE TABLE IF NOT EXISTS action_type
 	id SMALLINT PRIMARY KEY UNIQUE,
 	name VARCHAR(30) NOT NULL UNIQUE,
 	
-	CHECK (name ~ '^[a-zA-Z]+$')
+	CHECK (name ~ '^[a-zA-Z]+$'),
+
+	INDEX idx_action_type_name (name)
 );
 
 CREATE TABLE IF NOT EXISTS action
@@ -56,8 +62,17 @@ CREATE TABLE IF NOT EXISTS doc_type
 	id SMALLINT PRIMARY KEY UNIQUE,
 	name VARCHAR(30) NOT NULL UNIQUE,
 	
-	CHECK (name ~ '^[a-zA-Z ]+$')
+	CHECK (name ~ '^[a-zA-Z ]+$'),
+
+	INDEX idx_doc_type_name (name)
 );
+
+CREATE OR REPLACE FUNCTION check_author_role(author_id SMALLINT)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN author_id IN (SELECT id FROM users WHERE role_id IN (1, 2));
+END;
+$$ LANGUAGE plpgsql;
 
 CREATE TABLE IF NOT EXISTS document
 (
@@ -66,8 +81,12 @@ CREATE TABLE IF NOT EXISTS document
 	description TEXT NOT NULL,
 	last_change_time TIMESTAMP NOT NULL,
 	doc_type_id INT NOT NULL,
+	author_id SMALLINT NOT NULL,
 	
-	FOREIGN KEY (doc_type_id) REFERENCES doc_type (id)
+	FOREIGN KEY (doc_type_id) REFERENCES doc_type (id),
+	FOREIGN KEY (author_id) REFERENCES users (id),
+
+	INDEX idx_title (title)
 );
 
 CREATE TABLE IF NOT EXISTS state_system
@@ -76,10 +95,12 @@ CREATE TABLE IF NOT EXISTS state_system
 	system_type VARCHAR(30) NOT NULL UNIQUE,
 	description TEXT,
 	
-	CHECK (system_type ~ '^[a-zA-Z]+$')
+	CHECK (system_type ~ '^[a-zA-Z]+$'),
+
+	INDEX idx_system_type (system_type)
 );
 
-CREATE TABLE IF NOT EXISTS countrie
+CREATE TABLE IF NOT EXISTS country
 (
 	id SMALLINT PRIMARY KEY UNIQUE,
 	name VARCHAR(40) NOT NULL UNIQUE,
@@ -88,7 +109,9 @@ CREATE TABLE IF NOT EXISTS countrie
 	
 	FOREIGN KEY (state_system_id) REFERENCES state_system (id),
 	CHECK (name ~ '^[a-zA-Z ]+$'),
-	CHECK (capital ~ '^[a-zA-Z ]+$')
+	CHECK (capital ~ '^[a-zA-Z ]+$'),
+
+	INDEX idx_name_capital (name, capital)
 );
 
 CREATE TABLE IF NOT EXISTS historical_figure
@@ -103,7 +126,7 @@ CREATE TABLE IF NOT EXISTS historical_figure
 	CHECK (last_name ~ '^[a-zA-Z ]+$')
 );
 
-CREATE TABLE IF NOT EXISTS figure_countrie_doc_linc
+CREATE TABLE IF NOT EXISTS figure_country_doc_linc
 (
 	historical_figure_id SMALLINT NOT NULL,
 	countrie_id SMALLINT NOT NULL,
@@ -119,7 +142,9 @@ CREATE TABLE IF NOT EXISTS collection
 (
 	id SMALLINT PRIMARY KEY UNIQUE,
 	name VARCHAR(40) NOT NULL,
-	description TEXT
+	description TEXT,
+
+	INDEX idx_collection_name (name)
 );
 
 CREATE TABLE IF NOT EXISTS user_collection_link
@@ -130,7 +155,9 @@ CREATE TABLE IF NOT EXISTS user_collection_link
 	
 	PRIMARY KEY (user_id, collection_id),
 	FOREIGN KEY (user_id) REFERENCES users (id),
-	FOREIGN KEY (collection_id) REFERENCES collection (id)
+	FOREIGN KEY (collection_id) REFERENCES collection (id),
+
+	INDEX idx_is_subscribe (is_subscribe)
 );
 
 CREATE TABLE IF NOT EXISTS collection_doc_link
@@ -141,17 +168,3 @@ CREATE TABLE IF NOT EXISTS collection_doc_link
 	FOREIGN KEY (collection_id) REFERENCES collection (id),
 	FOREIGN KEY (document_id) REFERENCES document (id) ON DELETE CASCADE
 );
-
-
-CREATE OR REPLACE FUNCTION check_author_role(author_id SMALLINT)
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN author_id IN (SELECT id FROM users WHERE role_id IN (1, 2));
-END;
-$$ LANGUAGE plpgsql;
-
-
-ALTER TABLE document
-ADD COLUMN author_id SMALLINT CHECK (check_author_role(author_id)),
-ADD CONSTRAINT fk_author
-    FOREIGN KEY (author_id) REFERENCES users (id);
