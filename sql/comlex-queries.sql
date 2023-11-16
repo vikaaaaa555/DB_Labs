@@ -120,3 +120,18 @@ GROUP BY
 	at.id
 ORDER BY
 	at.id DESC
+
+
+-- Вывести тип документа, у которого столицей является Вильнюс
+SELECT
+	d.title,
+	dt.name AS document_type
+FROM
+	document d
+JOIN doc_type dt ON d.doc_type_id = dt.id
+JOIN figure_country_doc_link fcdl ON fcdl.document_id = d.id
+JOIN country c ON c.id = fcdl.countrie_id
+WHERE
+	c.capital LIKE 'Vilnius'
+GROUP BY
+	d.title, document_type
