@@ -20,7 +20,7 @@ WHERE doc_type_id = (SELECT id FROM doc_type WHERE name = 'Cultural history');
 
 -- Документы, содержащие слово 'born'
 SELECT * FROM document
-WHERE LOWER(description) LIKE '%born%';
+WHERE description LIKE '%born%';
 
 -- Фамилии, содержащие о
 SELECT * FROM profile
