@@ -11,7 +11,7 @@ CREATE OR REPLACE PROCEDURE add_new_user(
 )
 AS $$
 DECLARE
-    v_user_id INT;
+    v_user_id SMALLINT;
 BEGIN
     -- Вставка пользователя
     INSERT INTO users (login, password, role_id)
