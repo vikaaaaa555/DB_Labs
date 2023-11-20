@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS user_collection_link
 (
 	user_id SMALLINT NOT NULL,
 	collection_id SMALLINT NOT NULL,
-	is_subscribe BOOLEAN,
+	is_subscribe BOOLEAN DEFAULT false NOT NULL,
 	
 	PRIMARY KEY (user_id, collection_id),
 	FOREIGN KEY (user_id) REFERENCES users (id),
