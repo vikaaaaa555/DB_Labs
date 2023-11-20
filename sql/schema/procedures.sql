@@ -13,12 +13,12 @@ AS $$
 DECLARE
     v_user_id INT;
 BEGIN
-    -- Вставка нового пользователя
+    -- Вставка пользователя
     INSERT INTO users (login, password, role_id)
     VALUES (p_login, p_password, p_role_id)
     RETURNING id INTO v_user_id;
 
-    -- Вставка профиля пользователя
+    -- Вставка профиля
     INSERT INTO profile (user_id, first_name, last_name, email, phone_number, birth_date)
     VALUES (v_user_id, p_first_name, p_last_name, p_email, p_phone_number, p_birth_date);
 END;
@@ -67,7 +67,6 @@ CREATE OR REPLACE PROCEDURE update_document(
 )
 AS $$
 BEGIN
-    -- Обновление информации о документе
     UPDATE document
     SET
         title = COALESCE(p_title, title),
