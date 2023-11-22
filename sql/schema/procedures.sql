@@ -32,8 +32,9 @@ CREATE OR REPLACE PROCEDURE subscribe_to_collection(
 )
 AS $$
 BEGIN
-    INSERT INTO user_collection_link (user_id, collection_id, is_subscribe)
-    VALUES (p_user_id, p_collection_id, true);
+    UPDATE user_collection_link
+	SET is_subscribe = true
+	WHERE (user_id = p_user_id AND collection_id = p_collection_id);
 END;
 $$ LANGUAGE plpgsql;
 
