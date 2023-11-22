@@ -122,7 +122,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_collection_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON document
+AFTER INSERT OR UPDATE OR DELETE ON collection
 FOR EACH ROW
 EXECUTE FUNCTION log_collection_changes();
 
@@ -147,7 +147,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_country_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON document
+AFTER INSERT OR UPDATE OR DELETE ON country
 FOR EACH ROW
 EXECUTE FUNCTION log_country_changes();
 
@@ -172,6 +172,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_historical_figure_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON document
+AFTER INSERT OR UPDATE OR DELETE ON historical_figure
 FOR EACH ROW
 EXECUTE FUNCTION log_historical_figure_changes();
