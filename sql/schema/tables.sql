@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS action
 	action_type_id SMALLINT NOT NULL,
 	
 	FOREIGN KEY (action_type_id) REFERENCES action_type (id),
-	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE SET NULL
+	FOREIGN KEY (user_id) REFERENCES users (id) ON CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS doc_type
