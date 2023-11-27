@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS document
 	author_id SMALLINT NOT NULL,
 	
 	FOREIGN KEY (doc_type_id) REFERENCES doc_type (id),
-	FOREIGN KEY (author_id) REFERENCES users (id)
+	FOREIGN KEY (author_id) REFERENCES users (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS state_system
@@ -138,8 +138,8 @@ CREATE TABLE IF NOT EXISTS user_collection_link
 	is_subscribe BOOLEAN DEFAULT false NOT NULL,
 	
 	PRIMARY KEY (user_id, collection_id),
-	FOREIGN KEY (user_id) REFERENCES users (id),
-	FOREIGN KEY (collection_id) REFERENCES collection (id)
+	FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+	FOREIGN KEY (collection_id) REFERENCES collection (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS collection_doc_link
