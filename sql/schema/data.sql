@@ -1,12 +1,12 @@
-INSERT INTO role (role_type)
+INSERT INTO role (id, role_type)
 VALUES 
-	('admin'),
-	('archivist'),
-	('user');
+	(1, 'admin'),
+	(2, 'archivist'),
+	(3, 'user');
 
 INSERT INTO users (login, password, role_id)
 VALUES
-	('beatrix_kiddo', '2k@Ye-GR_yDV3op%CAZM', 1),
+	('admin', 'admin', 1),
 	('violet_harmon', 'yfT22e-y--4mv7%8nKMJ', 2),
 	('tate_langdon', 'p_gcb3NkY2_sUbvMPsb_', 2),
 	('eiichiro_oda', 'cEYJ6ghBfYtpV-----ka', 2),
@@ -14,7 +14,7 @@ VALUES
 	('jade_mebarak', 'r2KjPLUnfDrp0XyRKrMZ', 3),
 	('chanel_oberlin', 'wimLC%%ehr-FW_t84o8@', 3),
 	('meryem_uzerli', 'jG_BeZ_b0P3951RFj8iH', 3),
-	('matthew_smith', '%658q_1Js@@PZ_a-g3Jy', 3)
+	('matthew_smith', '%658q_1Js@@PZ_a-g3Jy', 3),
 	('the_california_mountain_snake', '2k@Ye-GR_yDV3op%CAAM', 3);
 
 INSERT INTO profile (user_id, first_name, last_name, email, phone_number, birth_date)
@@ -37,16 +37,13 @@ VALUES
 	('Logout'),
 	('Create document'),
 	('Edit document'),
-	('Delete document')
 	('Insert collection'),
 	('Edit collection'),
-	('Delete collection'),
 	('Insert historical figure'),
 	('Edit historical figure'),
-	('Delete historical figure'),
 	('Insert country'),
 	('Edit country'),
-	('Delete country');
+	('Edit profile');
 	
 INSERT INTO action (action_time, user_id, action_type_id)
 VALUES
@@ -58,7 +55,8 @@ VALUES
 	('2023-10-24 13:15:00', 6, 1),
 	('2023-10-24 13:30:00', 7, 1),
 	('2023-10-24 13:45:00', 8, 1),
-	('2023-10-24 14:00:00', 9, 1), 
+	('2023-10-24 14:00:00', 9, 1),
+	(CURRENT_TIMESTAMP, 10, 1),
 	
 	('2023-10-25 08:00:00', 1, 2),
 	('2023-10-25 08:15:00', 2, 2),
@@ -69,10 +67,10 @@ VALUES
 	('2023-10-25 09:30:00', 7, 2),
 	('2023-10-25 09:45:00', 8, 2),
 	('2023-10-25 10:00:00', 9, 2),
+	(CURRENT_TIMESTAMP, 10, 2),
 
 	('2023-10-26 17:00:00', 1, 3),
 	('2023-10-26 17:15:00', 2, 3),
-	('2023-10-26 17:30:00', 3, 3),
 	('2023-10-26 17:45:00', 4, 3);
 	
 INSERT INTO doc_type (name)
