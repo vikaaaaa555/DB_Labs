@@ -60,11 +60,7 @@ BEGIN
     ELSIF TG_OP = 'UPDATE' THEN
         -- Обновление
         INSERT INTO action (id, action_time, user_id, action_type_id)
-        VALUES (DEFAULT, CURRENT_TIMESTAMP, NEW.id, 7);
-    ELSIF TG_OP = 'DELETE' THEN
-        -- Удаление
-        INSERT INTO action (id, action_time, user_id, action_type_id)
-        VALUES (DEFAULT, CURRENT_TIMESTAMP, OLD.id, 8);
+        VALUES (DEFAULT, CURRENT_TIMESTAMP, NEW.id, 12);	
     END IF;
 
     RETURN NEW;
@@ -72,7 +68,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER user_change_trigger
-AFTER INSERT OR UPDATE OR DELETE ON users
+AFTER INSERT OR UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION user_change_trigger();
 
@@ -87,9 +83,6 @@ BEGIN
     ELSIF TG_OP = 'UPDATE' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
         VALUES (CURRENT_TIMESTAMP, NEW.author_id, 5);
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, OLD.author_id, 6);
     END IF;
 
     RETURN NEW;
@@ -97,7 +90,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_document_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON document
+AFTER INSERT OR UPDATE ON document
 FOR EACH ROW
 EXECUTE FUNCTION log_document_changes();
 
@@ -108,13 +101,10 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 9);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 6);
     ELSIF TG_OP = 'UPDATE' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 10);
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, OLD.author_id, 11);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 7);
     END IF;
 
     RETURN NEW;
@@ -122,7 +112,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_collection_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON collection
+AFTER INSERT OR UPDATE ON collection
 FOR EACH ROW
 EXECUTE FUNCTION log_collection_changes();
 
@@ -133,13 +123,10 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 15);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 10);
     ELSIF TG_OP = 'UPDATE' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 16);
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, OLD.author_id, 17);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 11);
     END IF;
 
     RETURN NEW;
@@ -147,7 +134,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_country_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON country
+AFTER INSERT OR UPDATE ON country
 FOR EACH ROW
 EXECUTE FUNCTION log_country_changes();
 
@@ -158,13 +145,10 @@ RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 12);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 8);
     ELSIF TG_OP = 'UPDATE' THEN
         INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 13);
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO action (action_time, user_id, action_type_id)
-        VALUES (CURRENT_TIMESTAMP, OLD.author_id, 14);
+        VALUES (CURRENT_TIMESTAMP, NEW.author_id, 9);
     END IF;
 
     RETURN NEW;
@@ -172,6 +156,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE TRIGGER log_historical_figure_changes_trigger
-AFTER INSERT OR UPDATE OR DELETE ON historical_figure
+AFTER INSERT OR UPDATE ON historical_figure
 FOR EACH ROW
 EXECUTE FUNCTION log_historical_figure_changes();
